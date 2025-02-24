@@ -14,6 +14,7 @@ function Navbar({ isLoggedIn, setIsLoggedIn }) {
     window.location.href = `${backendUrl}/api/spotify/login`;
   };
 
+  
   const handleLogout = async () => {
     try {
       await fetch(`${backendUrl}/api/songs/clear`, { method: "DELETE" });
