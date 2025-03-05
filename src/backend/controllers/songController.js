@@ -296,7 +296,6 @@ const deleteSong = async (req, res) => {
 };
 
 // Updated getSongSentiment function to handle hybrid results
-
 const getSongSentiment = async (req, res) => {
   try {
     const { song, artist } = req.query;
@@ -348,16 +347,26 @@ const getSongSentiment = async (req, res) => {
       return res.status(404).json({ error: "No flashcards found for this song" });
     }
     
-    // Combine all English translations for sentiment analysis
-    const englishText = flashcards.map(card => card.back).join(" ");
+    // Extract all lyrical content for enhanced analysis
+    const originalLyrics = flashcards.map(card => card.front).join("\n");
+    const englishTranslations = flashcards.map(card => card.back).join("\n");
     
-    console.log(`🔍 Starting sentiment analysis for song: "${song}" with ${flashcards.length} flashcards`);
+    // Create context-rich input for sentiment analysis
+    // Format: English translations followed by key song metadata
+    const contextualInput = `${englishTranslations}\n\nSong: ${song}\nArtist: ${artist || "Unknown"}`;
+    
+    console.log(`🔍 Starting enhanced sentiment analysis for song: "${song}" with ${flashcards.length} lines`);
     
     // Analyze sentiment with API-only approach
     let sentimentResult;
     try {
-      sentimentResult = await analyzeSentiment(englishText);
-      console.log(`✅ API sentiment analysis for "${song}": ${sentimentResult.sentiment} / ${sentimentResult.primaryEmotion || 'Unknown'}`);
+      sentimentResult = await analyzeSentiment(contextualInput);
+      console.log(`✅ Enhanced sentiment analysis for "${song}": ${sentimentResult.sentiment} / ${sentimentResult.primaryEmotion || 'Unknown'}`);
+      
+      // Add detail about music context if available
+      if (sentimentResult.musicContext) {
+        console.log(`🎵 Musical emotion context: ${sentimentResult.musicContext}`);
+      }
     } catch (sentimentError) {
       console.error(`❌ CRITICAL: Sentiment analysis failed for "${song}":`, sentimentError);
       
@@ -378,14 +387,15 @@ const getSongSentiment = async (req, res) => {
     // Add song metadata
     sentimentResult.songMetadata = {
       title: song,
-      artist: artist || "Unknown Artist"
+      artist: artist || "Unknown Artist",
+      lineCount: flashcards.length
     };
     
     // Cache the sentiment result for 7 days if Redis is available
     try {
       if (global.redisClient) {
         await global.redisClient.setex(cacheKey, 604800, JSON.stringify(sentimentResult));
-        console.log(`💾 CACHED API sentiment result for: "${song}"`);
+        console.log(`💾 CACHED enhanced sentiment result for: "${song}"`);
       }
     } catch (cacheError) {
       console.log(`❌ Failed to cache sentiment result for "${song}":`, cacheError.message);

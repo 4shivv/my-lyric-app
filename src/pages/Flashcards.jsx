@@ -516,7 +516,7 @@ const logCurrentSong = async () => {
           </button>
         </motion.div>
 
-        {/* Sentiment Analysis Display with Emotions */}
+        {/* Sentiment Analysis Display with Enhanced Music Context */}
         {flashcards.length > 0 && (
           <motion.div 
             className="sentiment-container"
@@ -537,11 +537,23 @@ const logCurrentSong = async () => {
                   This song appears to be <span className="sentiment-value">{sentiment.sentiment}</span>
                 </div>
                 
-                {/* Primary Emotion Display */}
+                {/* Primary Emotion Display with Music Context */}
                 {sentiment.primaryEmotion && sentiment.primaryEmotion !== "Unknown" && (
                   <div className="primary-emotion">
-                    Primary emotion: <span className="emotion-value">{sentiment.primaryEmotion}</span>
+                    <span className="emotion-value">{sentiment.primaryEmotion}</span>
                     <span className="emotion-score">({sentiment.emotionScore})</span>
+                    {sentiment.musicContext && (
+                      <div className="music-context-badge">
+                        {sentiment.musicContext}
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* Enhanced Music Description */}
+                {sentiment.musicDescription && (
+                  <div className="music-description">
+                    {sentiment.musicDescription}
                   </div>
                 )}
                 
@@ -550,9 +562,19 @@ const logCurrentSong = async () => {
                   <div className="emotion-chips">
                     {sentiment.emotions.slice(1, 3).map((emotion, index) => (
                       <div key={index} className="emotion-chip">
-                        {emotion.emotion} <span className="chip-score">{emotion.score}</span>
+                        {emotion.emotion} 
+                        <span className="chip-score">{emotion.score}</span>
+                        {emotion.musicContext && (
+                          <span className="chip-context">{emotion.musicContext}</span>
+                        )}
                       </div>
                     ))}
+                  </div>
+                )}
+                
+                {sentiment.songStructureAnalyzed && (
+                  <div className="structure-badge">
+                    Song structure analyzed
                   </div>
                 )}
                 
@@ -561,7 +583,7 @@ const logCurrentSong = async () => {
                 {/* Display API source indicator */}
                 {!sentiment.fallback && (
                   <div className="sentiment-source api">
-                    Analysis performed via API
+                    Deep analysis via AI
                   </div>
                 )}
                 
@@ -577,7 +599,7 @@ const logCurrentSong = async () => {
                   </div>
                 ) : (
                   <div className="sentiment-info">
-                    Based on analysis of the English translations of these lyrics
+                    Based on lyrical analysis using advanced emotion recognition
                   </div>
                 )}
               </div>

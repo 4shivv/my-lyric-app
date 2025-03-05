@@ -283,6 +283,7 @@
 
 /* Sentiment Analysis Container - enhanced styling */
 .sentiment-container {
+  position: relative;
   margin-top: 40px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 18px;
@@ -293,9 +294,9 @@
   margin-right: auto;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.08);
   overflow: hidden;
-  position: relative;
+  border: 1px solid transparent;
+  background-clip: padding-box;
 }
 
 .sentiment-container:hover {
@@ -846,4 +847,113 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced Music Context and Structure Styling */
+.music-context-badge {
+  display: inline-block;
+  background: rgba(138, 138, 255, 0.15);
+  color: rgb(185, 185, 255);
+  padding: 4px 12px;
+  margin-left: 8px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border: 1px solid rgba(138, 138, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  animation: pulse 2s infinite;
+}
+
+.structure-badge {
+  display: inline-block;
+  background: rgba(100, 231, 100, 0.12);
+  color: rgb(170, 255, 170);
+  padding: 4px 12px;
+  margin-top: 12px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  border: 1px solid rgba(100, 231, 100, 0.25);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chip-context {
+  font-size: 0.7rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 2px 6px;
+  margin-left: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.music-description {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+  margin: 12px auto;
+  padding: 8px 15px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  max-width: 90%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  font-style: italic;
+  line-height: 1.5;
+}
+
+/* Gradient border animation */
+.sentiment-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 18px;
+  padding: 1px;
+  background: linear-gradient(
+    45deg, 
+    rgba(138, 138, 255, 0.5), 
+    rgba(252, 220, 77, 0.5), 
+    rgba(138, 138, 255, 0.5)
+  );
+  background-size: 200% 200%;
+  animation: gradient-shift 8s ease infinite;
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Update mobile responsiveness */
+@media (max-width: 768px) {
+  .music-context-badge {
+    margin-left: 0;
+    margin-top: 5px;
+    display: inline-block;
+    font-size: 0.75rem;
+    padding: 3px 8px;
+  }
+  
+  .music-description {
+    font-size: 0.85rem;
+    padding: 6px 12px;
+  }
+  
+  .structure-badge {
+    font-size: 0.7rem;
+    padding: 3px 8px;
+  }
+  
+  .chip-context {
+    font-size: 0.65rem;
+    padding: 1px 4px;
+  }
 }
